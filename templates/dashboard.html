@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-white">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2>URL Dashboard</h2>
+                    <a href="/" class="btn btn-sm btn-outline-primary">Create New</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label class="form-label">Original URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ target_url }}" readonly>
+                        <a href="{{ target_url }}" class="btn btn-outline-secondary" target="_blank">Visit</a>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label">Short URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ short_url }}" readonly>
+                        <a href="{{ short_url }}" class="btn btn-primary" target="_blank">Visit</a>
+                        <button class="btn btn-outline-primary copy-btn" data-clipboard-text="{{ short_url }}">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Clicks</h5>
+                                <p class="display-4">{{ clicks }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <h5 class="card-title">Status</h5>
+                                <span class="badge bg-{% if is_active %}success{% else %}danger{% endif %}">
+                                    {{ 'Active' if is_active else 'Inactive' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if is_active %}
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <form action="/admin/{{ secret_key }}/delete" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ request.session.get('csrf_token', '') }}">
+                        <button type="submit" class="btn btn-danger">
+                            Deactivate URL
+                        </button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

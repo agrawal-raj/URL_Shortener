@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header {% if deleted %}bg-danger text-white{% else %}bg-success text-white{% endif %}">
+                <h2 class="text-center">
+                    {% if deleted %}URL Deleted{% else %}URL Created Successfully!{% endif %}
+                </h2>
+            </div>
+            <div class="card-body">
+                {% if not deleted %}
+                <div class="mb-3">
+                    <label class="form-label">Original URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ target_url }}" readonly>
+                        <button class="btn btn-outline-secondary copy-btn" data-clipboard-text="{{ target_url }}">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="mb-3">
+                    <label class="form-label">Short URL:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="{{ short_url }}" readonly>
+                        <a href="{{ short_url }}" class="btn btn-primary" target="_blank">Visit</a>
+                        <button class="btn btn-outline-primary copy-btn" data-clipboard-text="{{ short_url }}">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                
+                {% if not deleted %}
+                <div class="alert alert-info">
+                    <strong>Admin Dashboard:</strong> 
+                    <a href="{{ admin_url }}">{{ admin_url }}</a>
+                    <p class="mt-2 mb-0">Use this link to track clicks and manage your URL</p>
+                </div>
+                {% else %}
+                <div class="alert alert-danger">
+                    This short URL has been deactivated and will no longer redirect users
+                </div>
+                {% endif %}
+                
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-lg btn-primary">Create Another</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
